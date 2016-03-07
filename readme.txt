@@ -3,7 +3,7 @@ Contributors: itthinx
 Donate link: http://www.itthinx.com/plugins/post-generator/
 Tags: automatic, benchmark, custom post type, example, generator, performance, page, post, post type, sample, test, tester, testing, test-tool
 Requires at least: 4.0
-Tested up to: 4.4.2
+Tested up to: 4.5
 Stable tag: 1.0.0
 License: GPLv3
 
@@ -16,6 +16,8 @@ This plugin is intended to be used as a sample post generator for WordPress.
 It's purpose is to provide an automated way of creating even very large sets
 of posts, useful in providing a test environment for performance benchmarks
 and use case testing.
+
+To create sample products for WooCommerce, it's recommended to rather use [WooCommerce Product Generator](http://wordpress.org/plugins/woocommerce-product-generator/).
 
 == Installation ==
 
@@ -32,11 +34,9 @@ You can install the plugin via FTP, see [Manual Plugin Installation](http://code
 
 == Screenshots ==
 
-1. Plugins menu integration.
-2. Generator settings.
-3. Generator actions, single and continuous product generation runs.
-4. Continuous generator running.
-5. Some sample posts generated.
+1. Generator settings.
+2. Generator actions, single and continuous product generation runs.
+3. Some sample posts generated.
 
 == Changelog ==
 
