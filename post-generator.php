@@ -49,9 +49,8 @@ class Post_Generator {
 	const IMAGE_HEIGHT       = 512;
 	const DEFAULT_POST_TYPE  = 'post';
 	const DEFAULT_LIMIT      = 10000;
-	const DEFAULT_CONTENTS   = GENERATOR_DEFAULT_CONTENTS;
-	const DEFAULT_TITLES     = GENERATOR_DEFAULT_TITLES;
-	const DEFAULT_CATEGORIES = GENERATOR_DEFAULT_CATEGORIES;
+// 	const Post_Generator_Constants::$contents   = Post_Generator_Constants::$contents;
+// 	const Post_Generator_Constants::$titles     = Post_Generator_Constants::$titles;
 
 	/**
 	 * Initialize hooks.
@@ -82,21 +81,13 @@ class Post_Generator {
 	 * Add the Generator menu item.
 	 */
 	public static function admin_menu() {
-		$page = add_plugins_page(
+		$page = add_menu_page(
 			__( 'Post Generator', GENERATOR_PLUGIN_DOMAIN ),
 			__( 'Post Generator', GENERATOR_PLUGIN_DOMAIN ),
 			'install_plugins',
-			'generator',
+			'post-generator',
 			array( __CLASS__, 'admin' )
 		);
-// 		$page = add_submenu_page(
-// 			'plugins.php',
-// 			'Generator',
-// 			'Generator',
-// 			'install_plugins',
-// 			'generator',
-// 			array( __CLASS__, 'admin' )
-// 		);
 		add_action( 'load-' . $page, array( __CLASS__, 'load' ) );
 	}
 
@@ -112,7 +103,7 @@ class Post_Generator {
 	 * @param array $links with additional links
 	 */
 	public static function admin_settings_link( $links ) {
-		$links[] = '<a href="' . get_admin_url( null, 'admin.php?page=generator' ) . '">' . __( 'Generator', GENERATOR_PLUGIN_DOMAIN ) . '</a>';
+		$links[] = '<a href="' . get_admin_url( null, 'admin.php?page=post-generator' ) . '">' . __( 'Generator', GENERATOR_PLUGIN_DOMAIN ) . '</a>';
 		return $links;
 	}
 
@@ -197,17 +188,17 @@ class Post_Generator {
 			add_option( 'generator-per-run', self::DEFAULT_PER_RUN, null, 'no' );
 
 			delete_option( 'generator-titles' );
-			add_option( 'generator-title', self::DEFAULT_TITLES, null, 'no' );
+			add_option( 'generator-title', Post_Generator_Constants::$titles, null, 'no' );
 
 			delete_option( 'generator-contents' );
-			add_option( 'generator-contents', self::DEFAULT_CONTENTS, null, 'no' );
+			add_option( 'generator-contents', Post_Generator_Constants::$contents, null, 'no' );
 		}
 
 		$post_type = get_option( 'generator-post-type', self::DEFAULT_POST_TYPE );
 		$limit     = get_option( 'generator-limit', self::DEFAULT_LIMIT );
 		$per_run   = get_option( 'generator-per-run', self::DEFAULT_PER_RUN );
-		$titles    = stripslashes( get_option( 'generator-titles', self::DEFAULT_TITLES ) );
-		$contents  = stripslashes( get_option( 'generator-contents', self::DEFAULT_CONTENTS ) );
+		$titles    = stripslashes( get_option( 'generator-titles', Post_Generator_Constants::$titles ) );
+		$contents  = stripslashes( get_option( 'generator-contents', Post_Generator_Constants::$contents ) );
 
 		$titles = explode( "\n", $titles );
 		sort( $titles );
@@ -254,7 +245,7 @@ class Post_Generator {
 				$label = __( $labels->singular_name );
 			}
 			$selected = ( $a_post_type == $post_type ? ' selected="selected" ' : '' );
-			printf( '<option value="%s" %s>%s</option>', esc_attr( $post_type ), $selected, esc_html( $label ) ); 
+			printf( '<option value="%s" %s>%s</option>', esc_attr( $a_post_type ), $selected, esc_html( $label ) ); 
 		}
 		echo '</select>';
 		echo '</label>';
@@ -435,7 +426,8 @@ class Post_Generator {
 		) ) );
 	}
 
-	public static function create_post( $post_type = 'post' ) {
+	public static function create_post() {
+		$post_type = get_option( 'generator-post-type', self::DEFAULT_POST_TYPE );
 		$user_id = self::get_user_id(); 
 		$title = self::get_title();
 		$i = 0;
@@ -464,7 +456,7 @@ class Post_Generator {
 			if ( $post_type == 'post' ) {
 				// add categories
 				$terms = array();
-				$cats = explode( "\n", self::DEFAULT_CATEGORIES );
+				$cats = Post_Generator_Constants::$categories;
 				$c_n = count( $cats );
 				$c_max = rand( 1, 3 );
 				for ( $i = 0; $i < $c_max ; $i++ ) {
@@ -559,7 +551,7 @@ class Post_Generator {
 	 * @return string
 	 */
 	public static function get_title( $n_words = 3 ) {
-		$titles = trim( stripslashes( get_option( 'generator-titles', self::DEFAULT_TITLES ) ) );
+		$titles = trim( stripslashes( get_option( 'generator-titles', Post_Generator_Constants::$titles ) ) );
 		$titles = explode( "\n", $titles );
 		$title = array();
 		$n = count( $titles );
@@ -579,7 +571,7 @@ class Post_Generator {
 	 */
 	public static function get_excerpt( $n_lines = 3, $contents = null ) {
 		if ( $contents === null ) {
-			$contents = trim( stripslashes( get_option( 'generator-contents', self::DEFAULT_CONTENTS ) ) );
+			$contents = trim( stripslashes( get_option( 'generator-contents', Post_Generator_Constants::$contents ) ) );
 		} else {
 			$contents = str_ireplace( '</p>', "\n", $contents );
 			$contents = str_ireplace( '<p>', '', $contents );
@@ -605,7 +597,7 @@ class Post_Generator {
 	 * @return string
 	 */
 	public static function get_content( $n_lines = 10 ) {
-		$contents = trim( stripslashes( get_option( 'generator-contents', self::DEFAULT_CONTENTS ) ) );
+		$contents = trim( stripslashes( get_option( 'generator-contents', Post_Generator_Constants::$contents ) ) );
 		$contents = explode( "\n", $contents );
 		$content = array();
 		$n = count( $contents );
