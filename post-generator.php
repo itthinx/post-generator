@@ -21,7 +21,7 @@
  * Plugin Name: Post Generator
  * Plugin URI: http://www.itthinx.com/
  * Description: A sample content generator for WordPress.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: itthinx
  * Author URI: http://www.itthinx.com
  * Donate-Link: http://www.itthinx.com
@@ -572,10 +572,9 @@ class Post_Generator {
 	public static function get_excerpt( $n_lines = 3, $contents = null ) {
 		if ( $contents === null ) {
 			$contents = trim( stripslashes( get_option( 'generator-contents', Post_Generator_Constants::$contents ) ) );
-		} else {
-			$contents = str_ireplace( '</p>', "\n", $contents );
-			$contents = str_ireplace( '<p>', '', $contents );
 		}
+		$contents = str_ireplace( '</p>', "\n", $contents );
+		$contents = str_ireplace( '<p>', '', $contents );
 		$contents = explode( "\n", $contents );
 		$content = array();
 		$n = count( $contents );

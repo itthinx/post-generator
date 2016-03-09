@@ -4,7 +4,7 @@ Donate link: http://www.itthinx.com/plugins/post-generator/
 Tags: automatic, benchmark, custom post type, example, generator, performance, page, post, post type, sample, test, tester, testing, test-tool
 Requires at least: 4.0
 Tested up to: 4.5
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3
 
 A sample post generator for WordPress, supports custom post types.
@@ -40,10 +40,14 @@ You can install the plugin via FTP, see [Manual Plugin Installation](http://code
 
 == Changelog ==
 
+= 1.0.1 =
+* Default text is Lorem Ipsum.
+* Fixed tags not removed in excerpt.
+
 = 1.0.0 =
 * Initial release.
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-* Initial release.
+= 1.0.1 =
+* Default text ist Lorem Ipsum based.
