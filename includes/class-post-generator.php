@@ -41,6 +41,7 @@ class Post_Generator {
 	const DEFAULT_MIN_COMMENTS = 0;
 	const DEFAULT_MAX_COMMENTS = 0;
 	const DEFAULT_NEW_USER_PROBABILITY = 0.5;
+	const SCALE = 2;
 
 	/**
 	 * Initialize hooks.
@@ -157,11 +158,11 @@ class Post_Generator {
 			$min_comments = max( 0, $min_comments );
 			$max_comments = max( $min_comments, $max_comments );
 
-			$new_user_probability = !empty( $_POST['new-user-probability'] ) ? bcadd( '0', trim( $_POST['new-user-probability'] ) ) : self::DEFAULT_NEW_USER_PROBABILITY;
-			if ( bccomp( '0', $new_user_probability ) > 0 ) {
+			$new_user_probability = !empty( $_POST['new-user-probability'] ) ? bcadd( '0', trim( $_POST['new-user-probability'] ), self::SCALE ) : self::DEFAULT_NEW_USER_PROBABILITY;
+			if ( bccomp( '0', $new_user_probability, self::SCALE ) > 0 ) {
 				$new_user_probability = '0.0';
 			}
-			if ( bccomp( '1', $new_user_probability ) < 0 ) {
+			if ( bccomp( '1', $new_user_probability, self::SCALE ) < 0 ) {
 				$new_user_probability = '1.0';
 			}
 
@@ -616,8 +617,8 @@ class Post_Generator {
 				$max_groups   = get_option( 'post-generator-max-groups', self::DEFAULT_MAX_GROUPS );
 				if ( $max_groups > 0 ) {
 					$group_ids = $pgd->get_random_group_ids( $min_groups,$max_groups );
-					foreach( $groups_ids as $group_id ) {
-						Groups_Post_Access::create( array( 'post_id' => $post_id, 'group_ids' => $group_id ) );
+					foreach( $group_ids as $group_id ) {
+						Groups_Post_Access::create( array( 'post_id' => $post_id, 'group_id' => $group_id ) );
 					}
 				}
 			}
@@ -629,11 +630,16 @@ class Post_Generator {
 			if ( $max_comments > 0 ) {
 				$n = rand( $min_comments, $max_comments );
 				for ( $i = 1; $i < $n; $i++ ) {
-					$user_id = $pgd->create_or_get_random_user_id( $new_user_probability );
-					wp_insert_comment( array(
-						'user_id' => $user_id,
-						
-					) );
+					if ( $user_id = $pgd->create_or_get_random_user_id( $new_user_probability ) ) {
+						$user = get_user_by( 'id', $user_id );
+						wp_insert_comment( array(
+							'comment_author' => $user->user_login,
+							'comment_author_email' => $user->user_email,
+							'comment_post_ID' => $post_id,
+							'user_id' => $user_id,
+							'comment_content' => $pgd->get_random_content(),
+						) );
+					}
 				}
 			}
 		}

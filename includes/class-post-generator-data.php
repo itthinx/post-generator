@@ -57,6 +57,24 @@ class Post_Generator_Data {
 	}
 
 	/**
+	 * Generate random content based on our syllables.
+	 * @param number $min minimum number of words
+	 * @param number $max maximum number of words
+	 * @param number $min_syllables minimum numer of syllables per word
+	 * @param number $max_syllables maximum number of syllables per word
+	 * @return string
+	 */
+	public function get_random_content( $min = 1, $max = 50, $min_syllables = 1, $max_syllables = 5 ) {
+		$content = $this->get_uc_random_word( $min_syllables, $max_syllables );
+		$n = rand( $min, $max );
+		for( $i = 2; $i < $n; $i++ ) {
+			$content .= ' ' . $this->get_random_word( $min_syllables, $max_syllables );
+		}
+		$content .= '.';
+		return $content;
+	}
+
+	/**
 	 * Returns a randomly constructed word based on our syllables.
 	 *
 	 * @param number $min minimum number of syllables (default 1)
@@ -183,7 +201,7 @@ class Post_Generator_Data {
 			for ( $i = 1; $i < $n ; $i++ ) {
 				if ( count( $group_ids ) > 0 ) {
 					$k = rand( 0, count( $group_ids ) - 1 );
-					$result[] = $group_ids[$k];
+					$result[] = $group_ids[$k]->group_id;
 					unset( $group_ids[$k] );
 				} else {
 					break;
