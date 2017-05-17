@@ -1,4 +1,31 @@
 <?php
+/**
+ * class-post-generator-data.php
+ *
+ * Copyright (c) 2017 "kento" Karim Rahimpur www.itthinx.com
+ *
+ * This code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt.
+ *
+ * This code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This header and all notices must be kept intact.
+ *
+ * @author itthinx
+ * @package post-generator
+ * @since 1.0.0
+ */
+
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Provides constants used in content generation.
+ */
 class Post_Generator_Constants {
 
 public static $titles =
