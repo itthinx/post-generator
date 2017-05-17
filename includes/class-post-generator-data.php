@@ -202,7 +202,7 @@ class Post_Generator_Data {
 				if ( count( $group_ids ) > 0 ) {
 					$k = rand( 0, count( $group_ids ) - 1 );
 					$result[] = $group_ids[$k]->group_id;
-					unset( $group_ids[$k] );
+					array_splice( $group_ids, $k, 1 );
 				} else {
 					break;
 				}
